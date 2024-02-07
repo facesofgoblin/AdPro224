@@ -28,4 +28,21 @@ class ProductTest {
     void testGetProductQuantity() {
         assertEquals( 100, this.product.getProductQuantity());
     }
+
+    @Test
+    void testSetProductName() {
+        String newName = "Sampo Cap Baru";
+        product.setProductName(newName);
+        assertEquals(newName, product.getProductName());
+    }
+    @Test
+    void testSetProductQuantity() {
+        int newQuantity = 150;
+        product.setProductQuantity(newQuantity);
+        assertEquals(newQuantity, product.getProductQuantity());
+    }
+
 }
+
+
+

@@ -67,4 +67,77 @@ class ProductRepositoryTest {
         assertFalse(productIterator.hasNext());
     }
 
+    @Test
+    void testUpdateProduct() {
+        // Given
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        // When
+        product.setProductName("Sampo Cap Baru");
+        product.setProductQuantity(150);
+        productRepository.update(product);
+
+        // Then
+        Product updatedProduct = productRepository.find(product.getProductId());
+        assertNotNull(updatedProduct);
+        assertEquals("Sampo Cap Baru", updatedProduct.getProductName());
+        assertEquals(150, updatedProduct.getProductQuantity());
+    }
+
+    @Test
+    void testUpdateNonExistentProduct() {
+        // Given
+        Product nonExistentProduct = new Product();
+        nonExistentProduct.setProductId("non-existent-id");
+        nonExistentProduct.setProductName("Non-existent Product");
+        nonExistentProduct.setProductQuantity(50);
+
+        // When
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            productRepository.update(nonExistentProduct);
+        });
+
+        // Then
+        String expectedMessage = "Product not found";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testDeleteProduct() {
+        // Given
+        String productId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
+        Product product = new Product();
+        product.setProductId(productId);
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        // When
+        productRepository.delete(productId);
+
+        // Then
+        Product deletedProduct = productRepository.find(productId);
+        assertNull(deletedProduct);
+    }
+
+    @Test
+    void testDeleteNonExistentProduct() {
+        // Given
+        String nonExistentProductId = "non-existent-id";
+
+        // When
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            productRepository.delete(nonExistentProductId);
+        });
+
+        // Then
+        String expectedMessage = "Product not found";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 }
