@@ -34,4 +34,22 @@ public class ProductController {
         model.addAttribute("products", allProducts);
         return "productList";
     }
+    @GetMapping("")
+    public String showHomePage(){
+        return "index";
+    }
+    //Method-method baru untuk edit dan delete produk
+    @GetMapping("/edit/{id}")
+    public String editProductPage(@PathVariable("id") String id, Model model) {
+        Product product = service.getProduct(id); // Asumsikan metode ini mengembalikan produk berdasarkan ID
+        model.addAttribute("product", product);
+        return "editProduct";
+    }
+
+    @PostMapping("/save")
+    public String editProductPost(@ModelAttribute Product product, Model model){
+        service.update(product); // Langsung update produk
+        return "redirect:list";
+    }
 }
+
