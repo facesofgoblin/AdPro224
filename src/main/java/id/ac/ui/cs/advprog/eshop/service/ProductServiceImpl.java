@@ -20,8 +20,17 @@ public class ProductServiceImpl implements ProductService {
         productRepository.create(product);
         return product;
     }
+    @Override
+    public Product getProduct(String id){
+        return productRepository.findProductById(id);
+    }
 
     @Override
+    public Product update(Product product) {
+        productRepository.update(product);
+        return product;
+    }
+
     public List<Product> findAll() {
         Iterator<Product> productIterator = productRepository.findAll();
         List<Product> allProduct = new ArrayList<>();
@@ -29,3 +38,4 @@ public class ProductServiceImpl implements ProductService {
         return allProduct;
     }
 }
+
