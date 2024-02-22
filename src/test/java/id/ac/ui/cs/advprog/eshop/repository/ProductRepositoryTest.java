@@ -82,7 +82,7 @@ class ProductRepositoryTest {
         productRepository.update(product);
 
         // Then
-        Product updatedProduct = productRepository.find(product.getProductId());
+        Product updatedProduct = productRepository.findProductById(product.getProductId());
         assertNotNull(updatedProduct);
         assertEquals("Sampo Cap Baru", updatedProduct.getProductName());
         assertEquals(150, updatedProduct.getProductQuantity());
@@ -121,7 +121,7 @@ class ProductRepositoryTest {
         productRepository.delete(productId);
 
         // Then
-        Product deletedProduct = productRepository.find(productId);
+        Product deletedProduct = productRepository.findProductById(productId);
         assertNull(deletedProduct);
     }
 
