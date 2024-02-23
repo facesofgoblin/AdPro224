@@ -27,19 +27,19 @@ class HomePageFunctionalTest {
 
     @BeforeEach
     void setupTest() {
-        baseUrl = String.format("%s:%d", testBaseUrl, serverPort);
-        System.out.println("Base URL "+ baseUrl );
-
+        baseUrl = String.format("%s:%d/product", testBaseUrl, serverPort); // Append /product to the base URL
+        System.out.println("Base URL "+ baseUrl);
     }
 
     @Test
     void pageTitle_isCorrect(ChromeDriver driver) throws Exception {
-        driver.get(baseUrl);
+        driver.get(baseUrl); // This now accesses http://localhost:<port>/product
         String pageTitle = driver.getTitle();
 
         //Verify
         assertEquals("ADV Shop", pageTitle);
     }
+
 
     @Test
     void welcomeMessage_homePage_isCorrect(ChromeDriver driver) throws Exception {
