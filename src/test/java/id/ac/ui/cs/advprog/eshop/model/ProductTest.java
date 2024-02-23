@@ -29,6 +29,7 @@ class ProductTest {
         assertEquals( 100, this.product.getProductQuantity());
     }
 
+    // Testing untuk set nama produk dan kuantitas produk
     @Test
     void testSetProductName() {
         String newName = "Sampo Cap Baru";
