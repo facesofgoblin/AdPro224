@@ -29,22 +29,31 @@ public class ProductRepository {
 
     public Product update (Product product){
         int existingProductId = productData.indexOf(findProductById(product.getProductId()));
+
+        //ngecek kalau id itu -1 atau engga, kalau -1 berarti product nya gaada
+        if (existingProductId == -1){
+            throw new IllegalArgumentException("Product with ID " + product.getProductId() + " doesn't exist.");
+        }
         productData.set(existingProductId, product);
         return product;
     }
-  
+
     public void delete(String id) {
+        boolean found = false;
         Iterator<Product> iterator = productData.iterator();
         while (iterator.hasNext()) {
             Product product = iterator.next();
             if (product.getProductId().equals(id)) {
                 iterator.remove();
+                found = true;
                 break;
             }
+        } // kasus kalau id nya ga ditemukan berarti product nya gaada
+        if (!found) {
+            throw new IllegalArgumentException("Nothing to delete :)");
         }
     }
     public Iterator<Product> findAll(){
         return productData.iterator();
     }
 }
-
