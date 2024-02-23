@@ -39,7 +39,7 @@ public class ProductController {
         model.addAttribute("products", allProducts);
         return "productList";
     }
-    @GetMapping("/home")
+    @GetMapping("")
     public String showHomePage() {
         return "HomePage"; // Return the name of the HTML file without the extension
     }
