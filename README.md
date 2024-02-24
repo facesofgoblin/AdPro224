@@ -7,13 +7,34 @@ Kelas   : AdPro C
 Refleksi 1:
 Setelah mengimplementasi 2 fitur baru berupa edit dan delete, saya telah belajar standar koding dari modul ini dan mempraktikkannya dalam kedua fitur ini.
 Adapun clean code principles dan secure coding practices yang telah diimplementasikan adalah:
+
 Prinsip Clean Code:
-Penamaan yang Deskriptif: variabel, metode, dan kelas diberikan nama yang deskriptif seperti service, product, createProductPage, dan sebagainya.
 
-Modularitas dan SRP: Kode terbagi menjadi kelas-kelas yang memiliki tanggung jawab yang jelas, seperti ProductController, ProductService, dan ProductRepository.
+1. Penamaan yang Deskriptif: variabel, metode, dan kelas diberikan nama yang deskriptif seperti service, product, createProductPage, dan sebagainya.
 
-Penggunaan Anotasi: Anotasi Spring digunakan secara konsisten dan tepat untuk mendefinisikan komponen dan menangani permintaan HTTP.
+2. Modularitas dan SRP: Kode terbagi menjadi kelas-kelas yang memiliki tanggung jawab yang jelas, seperti ProductController, ProductService, dan ProductRepository.
 
-Format Kode dan Gaya: Format kode dalam kode yang disediakan terlihat konsisten dan rapi, mengikuti konvensi penulisan Java standar.
+3. Penggunaan Anotasi: Anotasi Spring digunakan secara konsisten dan tepat untuk mendefinisikan komponen dan menangani permintaan HTTP.
+
+4. Format Kode dan Gaya: Format kode dalam kode yang disediakan terlihat konsisten dan rapi, mengikuti konvensi penulisan Java standar.
 
 Akan tetapi, saya merasa belum mengimplementasikan prinsip clean code secara menyeluruh terlebih secure coding practices. Misalnya, saya belum melakukan validasi input, penanganan kesalahan, otentikasi dan otorisasi. 
+
+
+Refleksi 2:
+
+1.
+Menulis unit test penting untuk memastikan bahwa kode berfungsi dengan baik. Meskipun tidak ada jumlah pasti unit test yang harus dibuat, kualitas test lebih penting daripada kuantitas. Code coverage bisa digunakan untuk memastikan sebagian besar kode telah diuji, tetapi memiliki 100% coverage tidak menjamin bebas dari bug. Selain itu, test harus efektif dalam memverifikasi fungsionalitas yang diharapkan dan menangani kasus-kasus khusus.
+
+2. 
+Dalam pembuatan test fungsional baru, penting untuk memperhatikan kebersihan kode. Potensi masalah meliputi:
+
+Duplikasi Kode: Risiko duplikasi kode tinggi jika setup dan variabel sama dengan test sebelumnya. Ini mempersulit perawatan dan meningkatkan risiko kesalahan.
+
+Ketergantungan Tinggi: Suite test yang bergantung pada setup khusus sulit untuk dimaintain atau diadaptasi.
+
+Saran perbaikan meliputi:
+
+Refactoring untuk Mengurangi Duplikasi: Gunakan abstraksi untuk setup serupa atau pindahkan kode ke metode helper.
+Parameterized Tests: Gunakan parameterized tests untuk mengurangi duplikasi dan membuat test lebih efisien.
+

@@ -15,13 +15,39 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    public String emptyNameError = "Name shouldn't be empty!";
+    public String specialCharNameError = "Special characters are not allowed!";
     @Override
     public Product create(Product product) {
         productRepository.create(product);
+
+        if (product.getProductName() == null){
+            throw new IllegalArgumentException(emptyNameError);
+        } else if (!product.getProductName().matches("[A-Za-z ]+")){
+            throw new IllegalArgumentException(specialCharNameError);
+        }
+
+        if (product.getProductQuantity() < 1){
+            throw new IllegalArgumentException("Invalid quantity!");
+        }
         return product;
+    }
+    @Override
+
+    public void delete(String id) {
+        productRepository.delete(id);
+    }
+
+    public Product getProduct(String id){
+        return productRepository.findProductById(id);
     }
 
     @Override
+    public Product update(Product product) {
+        productRepository.update(product);
+        return product;
+    }
+
     public List<Product> findAll() {
         Iterator<Product> productIterator = productRepository.findAll();
         List<Product> allProduct = new ArrayList<>();
@@ -29,3 +55,4 @@ public class ProductServiceImpl implements ProductService {
         return allProduct;
     }
 }
+
