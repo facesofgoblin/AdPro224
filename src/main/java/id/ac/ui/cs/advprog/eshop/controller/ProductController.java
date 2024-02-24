@@ -40,10 +40,12 @@ public class ProductController {
         return "productList";
     }
     @GetMapping("")
-    public String showHomePage(){
-        return "index";
+    public String showHomePage() {
+        return "HomePage"; // Return the name of the HTML file without the extension
     }
+
     //Method-method baru untuk edit dan delete produk
+
     @GetMapping("/edit/{id}")
     public String editProductPage(@PathVariable("id") String id, Model model) {
         Product product = service.getProduct(id); // Asumsikan metode ini mengembalikan produk berdasarkan ID

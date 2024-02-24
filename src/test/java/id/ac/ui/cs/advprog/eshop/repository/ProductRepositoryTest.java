@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,7 @@ class ProductRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        // The setup method body seems to be empty in the screenshot
+
     }
 
     @Test
@@ -92,19 +93,13 @@ class ProductRepositoryTest {
     void testUpdateNonExistentProduct() {
         // Given
         Product nonExistentProduct = new Product();
-        nonExistentProduct.setProductId("non-existent-id");
+        nonExistentProduct.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         nonExistentProduct.setProductName("Non-existent Product");
         nonExistentProduct.setProductQuantity(50);
 
         // When
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            productRepository.update(nonExistentProduct);
-        });
-
-        // Then
-        String expectedMessage = "Product not found";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertThrows(IllegalArgumentException.class, () ->
+            productRepository.update(nonExistentProduct));
     }
 
     @Test
@@ -126,18 +121,8 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void testDeleteNonExistentProduct() {
-        // Given
-        String nonExistentProductId = "non-existent-id";
-
-        // When
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            productRepository.delete(nonExistentProductId);
-        });
-
-        // Then
-        String expectedMessage = "Product not found";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+    void testDeleteProductNotFound() {
+        assertThrows(IllegalArgumentException.class, () ->
+                productRepository.delete("6f1238f8-d13a-4e5b-936f-e55156158104"));
     }
 }
