@@ -15,7 +15,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    String emptyNameError = "Product name cannot be empty.";
+    String emptyNameError = "";
     String specialCharNameError = "Special characters are not allowed!";
 
     String invalidQuantity = "Invalid quantity!";
@@ -25,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
         // di sini seharusnya belum memanggil productRepository.create(product)
         // validasi data terlebih dahulu, sebelum membuat produk
         if (product.getProductName() == null){
-            throw new IllegalArgumentException(emptyNameError);
+            throw new IllegalArgumentException("Product name cannot be empty.");
         } else if (!product.getProductName().matches("[A-Za-z ]+")){
             throw new IllegalArgumentException(specialCharNameError);
         }
