@@ -14,10 +14,6 @@ public class ProductServiceImpl implements ProductService {
     //Deleting variables emptyNameError and specialCharNameError because it's not really used often in other functions beside the create method
     @Autowired
     private ProductRepository productRepository;
-
-    String emptyNameError = "";
-    String specialCharNameError = "Special characters are not allowed!";
-
     String invalidQuantity = "Invalid quantity!";
 
     @Override
@@ -27,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
         if (product.getProductName() == null){
             throw new IllegalArgumentException("Product name cannot be empty.");
         } else if (!product.getProductName().matches("[A-Za-z ]+")){
-            throw new IllegalArgumentException(specialCharNameError);
+            throw new IllegalArgumentException("Special characters are not allowed!");
         }
         if (product.getProductQuantity() < 1){
             throw new IllegalArgumentException(invalidQuantity);
