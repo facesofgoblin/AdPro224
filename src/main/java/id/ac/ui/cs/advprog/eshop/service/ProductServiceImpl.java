@@ -22,7 +22,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) {
-        productRepository.create(product);
+        // di sini seharusnya belum memanggil productRepository.create(product)
+        // validasi data terlebih dahulu, sebelum membuat produk
         if (product.getProductName() == null){
             throw new IllegalArgumentException(emptyNameError);
         } else if (!product.getProductName().matches("[A-Za-z ]+")){
@@ -31,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
         if (product.getProductQuantity() < 1){
             throw new IllegalArgumentException(invalidQuantity);
         }
-        return product;
+        return productRepository.create(product);
     }
 
     @Override
