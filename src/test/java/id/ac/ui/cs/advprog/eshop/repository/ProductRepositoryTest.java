@@ -40,6 +40,9 @@ class ProductRepositoryTest {
     }
 
     @Test
+    void testCreateEmptyField(){
+    }
+    @Test
     void testFindAllIfEmpty() {
         Iterator<Product> productIterator = productRepository.findAll();
         assertFalse(productIterator.hasNext());
@@ -103,6 +106,27 @@ class ProductRepositoryTest {
     }
 
     @Test
+    void testPartialUpdateProduct() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        // When
+        product.setProductName("Sampo Cap Baru");
+        productRepository.update(product);
+
+        // Then
+        Product updatedProduct = productRepository.findProductById(product.getProductId());
+        assertNotNull(updatedProduct);
+        assertEquals("Sampo Cap Baru", updatedProduct.getProductName());
+        assertEquals(100, updatedProduct.getProductQuantity());
+
+    }
+
+
+    @Test
     void testDeleteProduct() {
         // Given
         String productId = "eb558e9f-1c39-460e-8860-71af6af63bd6";
@@ -125,4 +149,5 @@ class ProductRepositoryTest {
         assertThrows(IllegalArgumentException.class, () ->
                 productRepository.delete("6f1238f8-d13a-4e5b-936f-e55156158104"));
     }
+
 }

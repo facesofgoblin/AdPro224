@@ -4,11 +4,10 @@ import io.github.bonigarcia.seljup.SeleniumJupiter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -45,6 +44,8 @@ public class CreateProductFunctionalTest {
 
     }
 
+
+    @Test
     void pageTitle_isCorrect(ChromeDriver driver) throws Exception {
         driver.get(fullProductListUrl); // This now accesses http://localhost:<port>/product
         String pageTitle = driver.getTitle();
@@ -61,125 +62,76 @@ public class CreateProductFunctionalTest {
         assertEquals("Welcome", welcomeMessage);
     }
 
-     //Test method to verify that the product creation workflow operates as expected.
+    void clickElement(WebDriver driver, By locator) {
+        WebElement element = new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(locator));
+        element.click();
+    }
+
+    void fillTextField(WebDriver driver, By locator, String text) {
+        WebElement textField = driver.findElement(locator);
+        textField.clear();
+        textField.sendKeys(text);
+    }
+
+    void submitForm(WebDriver driver, By submitButtonLocator) {
+        clickElement(driver, submitButtonLocator);
+    }
+
+    //Test method to verify that the product creation workflow operates as expected.
     @Test
     void validate_createButton_on_productListPage(ChromeDriver driver) throws Exception {
-        // Opens the product listing URL in the browser.
         driver.get(fullProductListUrl);
-        //disini pakai a bukan button, krn di html productList button create product itu diwrap dengan elemen anchor yang disesuaikan sbg button
-        WebElement createButton = driver.findElement(By.xpath("//a[contains(text(), 'Create Product')]"));
-        createButton.click();
-
-        String currentUrl = driver.getCurrentUrl();
-
-        // Validate that the current URL matches the expected URL.
-        assertEquals(createProductUrl, currentUrl);
+        clickElement(driver, By.xpath("//a[contains(text(), 'Create Product')]"));
+        assertEquals(createProductUrl, driver.getCurrentUrl());
     }
+
 
     @Test
     void validate_createProductPage(ChromeDriver driver) throws Exception {
         driver.get(createProductUrl);
 
-        // Fill in the product creation form
-        WebElement productNameField = driver.findElement(By.name("productName"));
-        productNameField.clear();
-        String productName = "Tes Nama Produk";
-        productNameField.sendKeys(productName);
+        fillTextField(driver, By.name("productName"), "Tes Nama Produk");
+        fillTextField(driver, By.name("productQuantity"), "100");
 
-        WebElement productQuantityField = driver.findElement(By.name("productQuantity"));
-        productQuantityField.clear();
-        String productQuantity = "100";
-        productQuantityField.sendKeys(productQuantity);
-
-        // Submit the form
-        WebElement submitButton = driver.findElement(By.xpath("//button[@type='submit']"));
-        submitButton.click();
-
-        // Navigate to the product list page
-        driver.get(fullProductListUrl);
-
-        // Validate the product exists in the list
-        boolean isProductFound = driver.findElements(By.xpath("//*[contains(text(), '" + productName + "')]")).size() > 0;
-        boolean isQuantityFound = driver.findElements(By.xpath("//*[contains(text(), '" + productQuantity + "')]")).size() > 0;
-
+        submitForm(driver, By.xpath("//button[@type='submit']"));
+        boolean isProductFound = !driver.findElements(By.xpath("//*[contains(text(), 'Tes Nama Produk')]")).isEmpty();
         assertTrue(isProductFound, "Product name not found in the list.");
-        assertTrue(isQuantityFound, "Product quantity not found in the list.");
     }
 
-    // Utility method to create a product
-    public void createProduct(ChromeDriver driver, String name, int quantity) {
-        driver.get(createProductUrl);
-
-        WebElement productNameField = driver.findElement(By.name("productName"));
-        productNameField.clear();
-        productNameField.sendKeys(name);
-
-        WebElement productQuantityField = driver.findElement(By.name("productQuantity"));
-        productQuantityField.clear();
-        productQuantityField.sendKeys(String.valueOf(quantity));
-
-        WebElement submitButton = driver.findElement(By.xpath("//button[@type='submit']"));
-        submitButton.click();
-
-        // Navigate to the product list page
-        driver.get(fullProductListUrl);
-    }
 
     @Test
     void testDeleteProduct(ChromeDriver driver) throws Exception {
+        driver.get(createProductUrl);
         String uniqueProductName = "Delete Temporary Product";
-        createProduct(driver, uniqueProductName, 10);
+        fillTextField(driver, By.name("productName"), uniqueProductName);
+        fillTextField(driver, By.name("productQuantity"), "100");
+        submitForm(driver, By.xpath("//button[@type='submit']"));
 
-        driver.get(fullProductListUrl);
+        clickElement(driver, By.xpath("//td[contains(text(), '" + uniqueProductName + "')]/../td/a[contains(text(), 'Delete')]"));
 
-        WebElement deleteLink = driver.findElement(By.xpath("//td[contains(text(), '" + uniqueProductName + "')]/../td/a[contains(text(), 'Delete')]"));
-        deleteLink.click();
-
-        //di sini ngehandle alert "Are you sure you want to delete this product?"
+        // Handle alert if present
         try {
             Alert alert = driver.switchTo().alert();
             alert.accept();
-        } catch (NoAlertPresentException e) {
-            // Handle cases where no confirmation is needed
-        }
+        } catch (NoAlertPresentException ignored) { }
 
-        int productCount = driver.findElements(By.xpath("//td[contains(text(), '" + uniqueProductName + "')]")).size();
-
-        assertEquals(0, productCount, "Product should no longer exist after deletion.");
+        assertEquals(0, driver.findElements(By.xpath("//td[contains(text(), '" + uniqueProductName + "')]")).size(), "Product should no longer exist after deletion.");
     }
 
     @Test
-    void testEditProduct (ChromeDriver driver) throws Exception {
+    void testEditProduct(ChromeDriver driver) throws Exception {
         driver.get(fullProductListUrl);
-        WebElement editLink = driver.findElement(By.xpath("//td[contains(text(), 'Tes Nama Produk')]/../td/a[contains(text(), 'Edit')]"));
-        editLink.click();
+        clickElement(driver, By.xpath("//td[contains(text(), 'Tes Nama Produk')]/../td/a[contains(text(), 'Edit')]"));
+        assertTrue(driver.getCurrentUrl().contains("/product/edit/"), "Not on the expected product edit page.");
 
-        String currentUrl = driver.getCurrentUrl();
-        assertTrue(currentUrl.contains("/product/edit/"), "Not on the expected product edit page.");
+        fillTextField(driver, By.name("productName"), "Edit Nama Produk");
+        fillTextField(driver, By.name("productQuantity"), "10");
+        submitForm(driver, By.xpath("//button[@type='submit']"));
 
-        WebElement productNameField = driver.findElement(By.name("productName"));
-        productNameField.clear();
-        String productName = "Edit Nama Produk";
-        productNameField.sendKeys(productName);
-
-        WebElement productQuantityField = driver.findElement(By.name("productQuantity"));
-        productQuantityField.clear();
-        String productQuantity = "10";
-        productQuantityField.sendKeys(productQuantity);
-
-        WebElement editButton = driver.findElement(By.xpath("//button[@type='submit']"));
-        editButton.click();
-
-        String currentUrlFinal= driver.getCurrentUrl();
-        assertEquals(fullProductListUrl, currentUrlFinal);
-
-        // Validate the product exists in the list
-        boolean isProductFound = driver.findElements(By.xpath("//*[contains(text(), '" + productName + "')]")).size() > 0;
-        boolean isQuantityFound = driver.findElements(By.xpath("//*[contains(text(), '" + productQuantity + "')]")).size() > 0;
-
-        assertTrue(isProductFound, "Product name not found in the list.");
-        assertTrue(isQuantityFound, "Product quantity not found in the list.");
-
+        assertEquals(fullProductListUrl, driver.getCurrentUrl(), "Not redirected back to the product list page.");
+        boolean isProductFound = !driver.findElements(By.xpath("//*[contains(text(), 'Edit Nama Produk')]")).isEmpty();
+        assertTrue(isProductFound, "Edited product name not found in the list.");
     }
 
 }

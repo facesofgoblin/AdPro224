@@ -11,29 +11,25 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
+    //Deleting variables emptyNameError and specialCharNameError because it's not really used often in other functions beside the create method
     @Autowired
     private ProductRepository productRepository;
-
-    public String emptyNameError = "Name shouldn't be empty!";
-    public String specialCharNameError = "Special characters are not allowed!";
     @Override
     public Product create(Product product) {
-        productRepository.create(product);
-
+        // di sini seharusnya belum memanggil productRepository.create(product)
+        // validasi data terlebih dahulu, sebelum membuat produk
         if (product.getProductName() == null){
-            throw new IllegalArgumentException(emptyNameError);
+            throw new IllegalArgumentException("Product name cannot be empty.");
         } else if (!product.getProductName().matches("[A-Za-z ]+")){
-            throw new IllegalArgumentException(specialCharNameError);
+            throw new IllegalArgumentException("Special characters are not allowed!");
         }
-
         if (product.getProductQuantity() < 1){
             throw new IllegalArgumentException("Invalid quantity!");
         }
-        return product;
+        return productRepository.create(product);
     }
-    @Override
 
+    @Override
     public void delete(String id) {
         productRepository.delete(id);
     }
