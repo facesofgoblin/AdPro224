@@ -14,26 +14,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
-
-    public String emptyNameError = "Name shouldn't be empty!";
-    public String specialCharNameError = "Special characters are not allowed!";
     @Override
     public Product create(Product product) {
-        productRepository.create(product);
+        // Trim the product name to ensure validation checks are against meaningful input
+        String productName = product.getProductName() != null ? product.getProductName().trim() : null;
 
-        if (product.getProductName() == null){
-            throw new IllegalArgumentException(emptyNameError);
-        } else if (!product.getProductName().matches("[A-Za-z ]+")){
-            throw new IllegalArgumentException(specialCharNameError);
+        if (productName == null || productName.isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be empty.");
+        } else if (!productName.matches("[A-Za-z ]+")) {
+            throw new IllegalArgumentException("Product name can only contain letters and spaces.");
         }
 
-        if (product.getProductQuantity() < 1){
-            throw new IllegalArgumentException("Invalid quantity!");
+        if (product.getProductQuantity() < 1) {
+            throw new IllegalArgumentException("Product quantity must be a positive number.");
         }
-        return product;
+
+        return productRepository.create(product);
     }
-    @Override
 
+    @Override
     public void delete(String id) {
         productRepository.delete(id);
     }
