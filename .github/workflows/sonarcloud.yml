@@ -30,10 +30,12 @@ name: SonarCloud analysis
 
 on:
   push:
-    branches: [ "**" ] # This triggers the workflow for all branches
+    branches-ignore:
+      - '*'
   pull_request:
-    branches: [ "**" ] # This triggers the workflow for pull requests targeting any branch
-  workflow_dispatch: # Allows manual triggering
+    branches-ignore:
+      - '*'
+  workflow_dispatch:
 
 permissions:
   pull-requests: read # allows SonarCloud to decorate PRs with analysis results
