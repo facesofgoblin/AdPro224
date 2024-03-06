@@ -11,7 +11,7 @@
     <h3>Edit Product</h3>
 
     <!--/*@thymesVar id="product" type=""*/-->
-    <form th:action="@{/product/save}" th:object="${product}" method="post">
+    <form th:action="@{/product/edit}" th:object="${product}" method="post">
         <input type="hidden" th:field="*{productId}" />
 
         <div class="form-group">
