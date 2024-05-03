@@ -1,3 +1,12 @@
+package id.ac.ui.cs.advprog.eshop.model;
+
+import id.ac.ui.cs.advprog.eshop.model.Order;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class OrderTest {
@@ -33,12 +42,12 @@ class OrderTest {
     void testCreateOrderDefaultStatus() {
         Order order = new Order( "13652556-012a-4c07-b546-54eb1396d79b",
                 this.products, 1708560000L,  "Safira Sudrajat");
-        assertSame(this.products, order.getproducts());
-        assertEquals(2, order.getproducts().size());
-        assertEquals("Sampo Cap Bambang", order.getProducts().get(0).getProductname()) ;
+        assertSame(this.products, order.getProducts());
+        assertEquals(2, order.getProducts().size());
+        assertEquals("Sampo Cap Bambang", order.getProducts().get(0).getProductName()) ;
         assertEquals(  "Sabun Cap Usep", order.getProducts().get(1).getProductName());
-        assertEquals(  "13652556-012a-4c07-b546-54eb1396d79b", order.getld());
-        assertEquals( 1708560000L, order.get0rderTime());
+        assertEquals(  "13652556-012a-4c07-b546-54eb1396d79b", order.getId());
+        assertEquals( 1708560000L, order.getOrderTime());
         assertEquals( "Safira Sudrajat", order.getAuthor());
         assertEquals( "WAITING_PAYMENT", order.getStatus());
     }
@@ -63,10 +72,10 @@ class OrderTest {
     //a happy path test: Test to edit the order with one of correct status.
     @Test
     void testSetstatusToCancelled() {
-        Order order = new Order( "13652556-012a-4c07-b546-54eb1396d79b"
+        Order order = new Order( "13652556-012a-4c07-b546-54eb1396d79b",
         this.products,  1708560000L,  "Safira Sudrajat");
         order. setStatus ("CANCELLED");
-        assertEquals(  "CANCELLED", order.getstatus());
+        assertEquals(  "CANCELLED", order.getStatus());
     }
 
     //an unhappy path test: Test to edit the order with invalid status.
@@ -74,6 +83,6 @@ class OrderTest {
     void testSetStatusToInvalidStatus() {
         Order order = new Order(  "13652556-012a-4c07-b546-54eb1396d79b" ,
                 this.products,  1708560000L,  "Safira Sudrajat");
-        assert Throws(IllegalArgumentException.class, () -> order.setStatus("MEOW"));
+        assertThrows(IllegalArgumentException.class, () -> order.setStatus("MEOW"));
     }
 }
