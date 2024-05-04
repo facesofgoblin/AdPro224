@@ -4,6 +4,7 @@ import enums.OrderStatus;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.repository.OrderRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -132,24 +133,22 @@ class OrderServiceTest {
     @Test
     void testFindAllByAuthorIfAuthorCorrect() {
         Order order = orders.get(1);
-        doReturn(orders).when(orderRepository).findALlByAuthor(order.getAuthor());
+        doReturn(orders).when(orderRepository).findAllByAuthor(order.getAuthor());
 
         List<Order> results = orderService.findAllByAuthor(order.getAuthor());
         for (Order result : results) {
             assertEquals(order.getAuthor(), result.getAuthor());
-
+        }
             assertEquals(2, results.size());
 
         }
-    }
 
     //Create an unhappy path test: Use findAl1ByAuthor to find Order using an all-lowercasename.
-
     @Test
     void testFindAllByAuthorIfAllLowercase() {
         Order order = orders.get(1);
         doReturn(new ArrayList<Order>()).when(orderRepository)
-        findAllByAuthor(order.getAuthor().toLowerCase());
+                .findAllByAuthor(order.getAuthor().toLowerCase());
 
         List<Order> results = orderService.findAllByAuthor(
                 order.getAuthor().toLowerCase());
