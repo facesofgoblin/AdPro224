@@ -65,7 +65,7 @@ class OrderServiceTest {
         Order order = orders.get(1);
         doReturn(order).when(orderRepository).findById(order.getId());
 
-        assertNull(orderService.createOrder(order));
+        Assertions.assertNull(orderService.createOrder(order));
         verify(orderRepository, times(0)).save(order);
     }
 
@@ -126,7 +126,7 @@ class OrderServiceTest {
     @Test
     void testFindByIdIfIdNotFound() {
         doReturn(null).when(orderRepository).findById("zczc");
-        assertNull(orderService.findById("zczc"));
+        Assertions.assertNull(orderService.findById("zczc"));
     }
 
     // Create a happy path test: Use findAllByAuthor to find Order using a valid author name.
