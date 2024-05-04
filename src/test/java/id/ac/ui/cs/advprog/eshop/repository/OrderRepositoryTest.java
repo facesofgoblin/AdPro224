@@ -73,13 +73,14 @@ class OrderRepositoryTest {
     void testFindByIdIfIdFound() {
         for (Order order : orders) {
             orderRepository.save(order);
+        }
             Order findResult = orderRepository.findById(orders.get(1).getId());
             assertEquals(orders.get(1).getId(), findResult.getId());
             assertEquals(orders.get(1).getOrderTime(), findResult.getOrderTime());
             assertEquals(orders.get(1).getAuthor(), findResult.getAuthor());
             assertEquals(orders.get(1).getStatus(), findResult.getStatus());
         }
-    }
+
 
     //Create an unhappy path test: Use findById to find Order using an ID that is never used.
     @Test
@@ -110,7 +111,5 @@ class OrderRepositoryTest {
                 orders.get(1).getAuthor().toLowerCase());
         assertTrue(orderList.isEmpty());
     }
-
-    //Create an unhappy path test: Use findAllByAuthor to find Order using an all-lowercase name.
 
 }
