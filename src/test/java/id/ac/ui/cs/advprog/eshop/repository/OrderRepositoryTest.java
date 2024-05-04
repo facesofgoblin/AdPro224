@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doReturn;
 
 class OrderRepositoryTest {
 
@@ -108,5 +109,17 @@ class OrderRepositoryTest {
         List<Order> orderList = orderRepository.findAllByAuthor(
                 orders.get(1).getAuthor().toLowerCase());
         assertTrue(orderList.isEmpty());
+    }
+
+    //Create an unhappy path test: Use findAllByAuthor to find Order using an all-lowercase name.
+    @Test
+    void testFindALlByAuthorIfALLLowercase() {
+        Order order = orders.get(1);
+        doReturn(new ArrayList<Order>()).when(orderRepository)
+                .findAllByAuthor (order.getAuthor().toLowerCase());
+
+        List<Order> results = orderService.findAllByAuthor(
+                order.getAuthor().toLowerCase());
+        assertTrue(results.isEmpty());
     }
 }
